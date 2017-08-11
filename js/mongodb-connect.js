@@ -1,4 +1,9 @@
-
+/*
+Step 1: learn how to connect to mongodb
+Step 2: learn mongoose (orm) to connect to mongodb
+        sudo npm i mongoose@latest --save
+Step 3: postman
+*/
 
 // const MongoClient = require('mongodb').MongoClient;
 const {MongoClient} = require('mongodb');
