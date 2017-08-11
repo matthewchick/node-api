@@ -3,6 +3,7 @@
 1. create api for model, mongoose connection
 2. sudo npm i express@latest body-parser@latest --save
 3. httpstatuses.com
+4. use nodemon, expect, mocha and supertest for TDD
 */
 // deconstructing at ES6
 var express = require('express');
@@ -21,11 +22,13 @@ app.use(bodyParser.json());
 app.post('/todos', (req, res) => {
   var todo = new Todo({
     text: req.body.text
+    //completedAt: req.body.text
   })
   console.log(req.body.text);
   todo.save().then((doc) => {
     res.send(doc);
-    console.log(JSON.stringify(doc, undefined, 2));
+    console.log(doc);
+    //console.log(JSON.stringify(doc, undefined, 2));
   }, (e) => {
     console.log('Unable to save todo', e);
     res.status(400).send(e);
