@@ -4,9 +4,12 @@
 2. sudo npm i express@latest body-parser@latest --save
 3. httpstatuses.com
 4. use nodemon, expect, mocha and supertest for TDD
+5. create post, get, delete and patch api
+6. install lodash
 */
 // deconstructing at ES6
 var express = require('express');
+const _ = require('lodash');
 // Parse incoming request bodies in a middleware before your handlers,
 // available under the req.body property.
 var bodyParser = require('body-parser');
@@ -85,6 +88,31 @@ app.delete('/todos/:id', (req, res) => {
     res.status(400).send();
   });
 });
+//update
+app.patch('/todos/:id', (req, res) => {
+  var id = req.params.id;
+  var body = _.pick(req.body, ['text', 'completed']);
+
+  if (!ObjectID.isValid(id)){
+    return res.status(404).send();
+  }
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    if (!todo){
+      return res.status(404).send();
+    }
+    res.send({todo});   //res.send({todo: todo})
+  }).catch((e)=> {
+    res.status(400).send();
+  });
+})
 
 app.listen(port, () => {
   console.log(`Started on port $(port)`);
