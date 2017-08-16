@@ -37,7 +37,7 @@ app.post('/todos', (req, res) => {
     //console.log(doc);
     //console.log(JSON.stringify(doc, undefined, 2));
   }, (e) => {
-    console.log('Unable to save todo', e);
+    //console.log('Unable to save todo', e);
     res.status(400).send(e);
   });
 });
