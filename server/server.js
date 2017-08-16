@@ -7,6 +7,7 @@
 5. create post, get, delete and patch api
 6. install lodash
 7. install validator
+8. install hashing, crypto-js
 */
 // deconstructing at ES6
 var express = require('express');
