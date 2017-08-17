@@ -1,18 +1,10 @@
 
 const mongoose = require('mongoose');
 const validator = require('validator');
-/*
-{
-  email: 'chikmatthew@gmail.com',
-  password: 'ksdfi3opckvlc',
-  tokens: [{
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
-  }]
-}
-http://mongoosejs.com/docs/validation.html
-*/
-
-var User = mongoose.model('User', {
+var UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -25,7 +17,7 @@ var User = mongoose.model('User', {
       message: '{VALUE} is not a valid email'
     }
   },
-  passsword: {
+  password: {
     type: String,
     require: true,
     minlength: 6
@@ -41,5 +33,38 @@ var User = mongoose.model('User', {
     }
   }]
 });
+
+//control returning output
+UserSchema.methods.toJSON = function() {
+  var user = this;
+  var userObject = user.toObject();
+  return _.pick(userObject, ['_id', 'email'])
+};
+
+UserSchema.methods.generateAuthToken = function () {
+  var user = this;
+  var access = 'auth';
+  var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+  console.log(token);
+
+  user.tokens.push({access, token});
+  //return token;
+  return user.save().then(() => {
+    return token;
+  });
+};
+
+/*
+{
+  email: 'chikmatthew@gmail.com',
+  password: 'ksdfi3opckvlc',
+  tokens: [{
+
+  }]
+}
+http://mongoosejs.com/docs/validation.html
+*/
+
+var User = mongoose.model('User', UserSchema);
 
 module.exports = {User};

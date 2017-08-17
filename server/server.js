@@ -7,7 +7,9 @@
 5. create post, get, delete and patch api
 6. install lodash
 7. install validator
-8. install hashing, crypto-js
+8. install hashing, crypto-js => sudo npm i crypto-js@latest --save
+9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
+   https://jwt.io/
 */
 // deconstructing at ES6
 var express = require('express');
@@ -120,9 +122,14 @@ app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body)
 
-  user.save().then((user) => {
-    res.send(user);
-  }). catch((e) => {
+  //User.findByToken
+  //user.generateAuthToken
+  user.save().then(() => {
+    return user.generateAuthToken();
+    //res.send(user);
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
     res.status(400).send(e);
   });
 });
