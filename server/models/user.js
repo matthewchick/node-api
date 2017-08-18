@@ -34,7 +34,7 @@ var UserSchema = new mongoose.Schema({
   }]
 });
 
-//control returning output
+//control returning output for generateAuthToken
 UserSchema.methods.toJSON = function() {
   var user = this;
   var userObject = user.toObject();
@@ -59,9 +59,12 @@ UserSchema.statics.findByToken = function (token) {
   var decoded;
 
   try {
-    decoded = wt.verify(token, 'abc123');
+    decoded = jwt.verify(token, 'abc123');
   } catch (e) {
-
+    //return new Promise((resolve, reject) => {
+    //  reject();
+    //});
+    return Promise.reject();
   }
 
   return User.findOne({
