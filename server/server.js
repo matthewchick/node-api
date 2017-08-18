@@ -11,7 +11,9 @@
  9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
     https://jwt.io/
 10. implement token and header
-11. how to set private route => authenticate
+11. how to set private route => authenticate as a middleware
+12. hashing password - bcryptjs,  Java uses jBCrypt
+13. learn mongoose middleware => mongoosejs.com/docs/middleware.html
 */
 // deconstructing at ES6
 var express = require('express');
