@@ -42,18 +42,34 @@ UserSchema.methods.toJSON = function() {
 };
 
 UserSchema.methods.generateAuthToken = function () {
-  var user = this;
+  var user = this;               //this => this user model
   var access = 'auth';
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
   console.log(token);
 
   user.tokens.push({access, token});
   //return token;
-  return user.save().then(() => {
+  return user.save().then(() => {     //Note .then as Promise in ES6
     return token;
   });
 };
+// set private route
+UserSchema.statics.findByToken = function (token) {
+  var User = this;
+  var decoded;
 
+  try {
+    decoded = wt.verify(token, 'abc123');
+  } catch (e) {
+
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  });
+};
 /*
 {
   email: 'chikmatthew@gmail.com',

@@ -1,15 +1,17 @@
 
 /*
-1. create api for model, mongoose connection
-2. sudo npm i express@latest body-parser@latest --save
-3. httpstatuses.com
-4. use nodemon, expect, mocha and supertest for TDD
-5. create post, get, delete and patch api
-6. install lodash
-7. install validator
-8. install hashing, crypto-js => sudo npm i crypto-js@latest --save
-9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
-   https://jwt.io/
+ 1. create api for model, mongoose connection - CRUD
+ 2. sudo npm i express@latest body-parser@latest --save
+ 3. httpstatuses.com
+ 4. use nodemon, expect, mocha and supertest for TDD
+ 5. create post, get, delete and patch api
+ 6. install lodash
+ 7. install validator
+ 8. install hashing, crypto-js => sudo npm i crypto-js@latest --save
+ 9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
+    https://jwt.io/
+10. implement token and header
+11. how to set private route
 */
 // deconstructing at ES6
 var express = require('express');
@@ -131,6 +133,17 @@ app.post('/users', (req, res) => {
     res.header('x-auth', token).send(user);
   }).catch((e) => {
     res.status(400).send(e);
+  });
+});
+// Set the private route
+app.get('/users/me', (req, res) => {
+  var token = req.header('x-auth');
+
+  User.findByToken(token).then((user) => {
+    if (!user) {
+
+    }
+    res.send(user);
   });
 });
 
