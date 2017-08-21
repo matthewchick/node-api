@@ -1,6 +1,6 @@
 
 /*
- 1. create api for model, mongoose connection - CRUD
+ 1. create api for model, mongoose connection
  2. sudo npm i express@latest body-parser@latest --save
  3. httpstatuses.com
  4. use nodemon, expect, mocha and supertest for TDD
@@ -11,9 +11,7 @@
  9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
     https://jwt.io/
 10. implement token and header
-11. how to set private route => authenticate as a middleware
-12. hashing password - bcryptjs,  Java uses jBCrypt
-13. learn mongoose middleware => mongoosejs.com/docs/middleware.html
+11. how to set private route
 */
 // deconstructing at ES6
 var express = require('express');
@@ -27,7 +25,6 @@ var {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
-var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 const port = process.env.PORT || 3000;
@@ -139,35 +136,15 @@ app.post('/users', (req, res) => {
   });
 });
 // Set the private route
-/* move it to authenticate.js
-var authenticate = (req, res, next) => {
+app.get('/users/me', (req, res) => {
   var token = req.header('x-auth');
 
-  User.findByToken(token).then((user) => {   //.then is promise callback
+  User.findByToken(token).then((user) => {
     if (!user) {
-      return Promise.reject();
-    }
-    req.user = user;
-    req.token = token;
-    next();
-  }).catch((e) => {
-    res.status(401).send();
-  });
-};
-*/
-app.get('/users/me', authenticate, (req, res) => {
 
-  res.send(req.user);
-  /*var token = req.header('x-auth');
-
-  User.findByToken(token).then((user) => {   //.then is promise callback
-    if (!user) {
-      return Promise.reject();
     }
     res.send(user);
-  }).catch((e) => {
-    res.status(401).send();
-  }); */
+  });
 });
 
 app.listen(port, () => {
