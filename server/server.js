@@ -14,6 +14,8 @@
 11. how to set private route
 */
 // deconstructing at ES6
+require('./config/config');
+
 var express = require('express');
 const _ = require('lodash');
 // Parse incoming request bodies in a middleware before your handlers,
