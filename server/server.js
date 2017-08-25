@@ -9,7 +9,7 @@
  7. install validator
  8. install hashing, crypto-js => sudo npm i crypto-js@latest --save
  9. install JWT => jeremychik$ sudo npm i jsonwebtoken@latest --save
-    https://jwt.io/
+    https://jwt.io/  JSON WEB TOKEN
 10. implement token and header
 11. how to set private route
 */
