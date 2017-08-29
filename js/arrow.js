@@ -1,3 +1,5 @@
+
+//ES6 arrow function
 var Ball = function (x, y, vx, vy) {
   this.x = x;
   this.y = y;

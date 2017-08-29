@@ -12,6 +12,9 @@
     https://jwt.io/  JSON WEB TOKEN
 10. implement token and header
 11. how to set private route
+12. how to create a test database
+13. Hashing password - bcryptjs => sudo npm i bcryptjs --save
+14. seeding Test Database with users
 */
 // deconstructing at ES6
 require('./config/config');
@@ -29,7 +32,7 @@ var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
 var app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -149,8 +152,8 @@ app.get('/users/me', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Started on port $(port)`);
+app.listen(PORT, () => {
+  console.log(`Started on port ${PORT}`);
 });
 
 module.exports = {app};
