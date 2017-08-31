@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -13,7 +12,7 @@ var UserSchema = new mongoose.Schema({
     trim: true,
     unique: true,
     validate: {
-      isAsync: false,    // fix deprecated in mongoose >= 4.9.0
+      isAsync: false, // fix deprecated in mongoose >= 4.9.0
       validator: validator.isEmail,
       message: '{VALUE} is not a valid email'
     }
@@ -23,50 +22,55 @@ var UserSchema = new mongoose.Schema({
     require: true,
     minlength: 6
   },
-  tokens: [{
-    access: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
+  tokens: [
+    {
+      access: {
+        type: String,
+        required: true
+      },
+      token: {
+        type: String,
+        required: true
+      }
     }
-  }]
+  ]
 });
 
 //control returning output
 UserSchema.methods.toJSON = function() {
   var user = this;
   var userObject = user.toObject();
-  return _.pick(userObject, ['_id', 'email'])
+  return _.pick(userObject, ['_id', 'email']);
 };
 
-UserSchema.methods.generateAuthToken = function () {
-  var user = this;               //this => this user model
+UserSchema.methods.generateAuthToken = function() {
+  var user = this; //this => this user model
   var access = 'auth';
-  var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+  var token = jwt
+    .sign({ _id: user._id.toHexString(), access }, 'abc123')
+    .toString();
   console.log(token);
 
-  user.tokens.push({access, token});
+  user.tokens.push({ access, token });
   //return token;
-  return user.save().then(() => {     //Note .then as Promise in ES6
+  return user.save().then(() => {
+    //Note .then as Promise in ES6
     return token;
   });
 };
 // set private route
-UserSchema.statics.findByToken = function (token) {
+UserSchema.statics.findByToken = function(token) {
   var User = this;
   var decoded;
 
   try {
-    decoded = wt.verify(token, 'abc123');
+    decoded = jwt.verify(token, 'abc123');
   } catch (e) {
-
+    return Promise.reject();
   }
 
   return User.findOne({
-    '_id': decoded._id,
+    _id: decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
   });
@@ -99,4 +103,4 @@ http://mongoosejs.com/docs/validation.html
 
 var User = mongoose.model('User', UserSchema);
 
-module.exports = {User};
+module.exports = { User };
