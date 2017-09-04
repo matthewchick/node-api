@@ -29,6 +29,7 @@ var { ObjectID } = require('mongodb');
 const { mongoose } = require('./db/mongoose.js');
 var { Todo } = require('./models/todo');
 var { User } = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 // deploy to Heroku
@@ -157,7 +158,11 @@ app.post('/users', (req, res) => {
       res.status(400).send(e);
     });
 });
-// Set the private route
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
+/* Set the private route
 app.get('/users/me', (req, res) => {
   var token = req.header('x-auth');
 
@@ -170,7 +175,7 @@ app.get('/users/me', (req, res) => {
     res.status(400).send(e);
   });
 });
-
+*/
 // deploy to Heroku
 app.listen(PORT, () => {
   console.log(`Started on port ${PORT}`);
